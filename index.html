@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+@import url(https://fonts.googleapis.com/css?family=Lato);
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  font-family: 'Lato', sans-serif;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  display: -webkit-flex;
+  -webkit-flex-direction: row;
+  -webkit-justify-content: center;
+  -webkit-align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.bg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  -moz-transition: opacity 2s ease-in-out;
+  -o-transition: opacity 2s ease-in-out;
+  -webkit-transition: opacity 2s ease-in-out;
+  transition: opacity 2s ease-in-out;
+  opacity: 0;
+}
+.bg.show {
+  opacity: 1;
+}
+
+.bg:nth-of-type(5n+1) {
+  background: linear-gradient(20deg, #6fe3e7, #4fb8d9 25%, #5648c1);
+}
+
+.bg:nth-of-type(5n+2) {
+  background: linear-gradient(-20deg, #104a72, #5dd19c 75%, #fffae8);
+}
+
+.bg:nth-of-type(5n+3) {
+  background: linear-gradient(20deg, #accd3a, #2bc792);
+}
+
+.bg:nth-of-type(5n+4) {
+  background: linear-gradient(-20deg, #d23c39, #dca74a);
+}
+
+.bg:nth-of-type(5n+5) {
+  background: linear-gradient(20deg, #7b4397, #dc2430);
+}
+
+.container {
+  position: relative;
+  z-index: 999;
+}
+
+.clock {
+	display: table-cell;
+	vertical-align: center;
+	text-align: center;
+	min-width: 300px;
+	margin: 0 auto;
+	font-size: 40px;
+	color: rgba(0,0,0, 0.6);
+}
+
+</style>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/x-tag/1.5.11/x-tag-core.min.js'></script>
+
+<script>
+
+var currIndex = 0;
+var bg = document.getElementsByClassName("bg");
+
+xtag.register('x-clock', {
+  lifecycle: {
+    created: function(){
+      this.start();
+    }
+  },
+  methods: {
+    start: function(){
+      this.update();
+      this.xtag.interval = setInterval(this.update.bind(this), 1000);
+    },
+    stop: function(){
+      this.xtag.interval = clearInterval(this.xtag.interval);
+    },
+    update: function(){
+    	var formattedGivenDate = new Date("June, 30, 2017");
+		  var today = new Date();
+			var msDiff =formattedGivenDate - today;
+			var days = parseInt(msDiff/(24*3600*1000));
+			var hours =parseInt(msDiff/(3600*1000)-(days*24));
+			var mins = parseInt(msDiff/(60*1000)-(days*24*60)-(hours*60));
+			var secs = parseInt(msDiff/(1000)-(mins*60)-(days*24*60*60)-(hours*60*60));
+	  	this.textContent = days + ' days, ' + hours + ' hours, ' + mins + ' mins, ' + secs + ' secs';
+    }
+  },
+  events: {
+    tap: function(){
+
+			var nextIndex = (currIndex + 1) % bg.length;
+			bg[currIndex].className = "bg";
+			bg[nextIndex].className += " show";
+			currIndex = nextIndex;
+   
+  	}
+	}
+});
+
+</script>
+	
+</head>
+<body>
+	
+<div class="bg show"></div>
+<div class="bg"></div>
+<div class="bg"></div>
+<div class="bg"></div>
+<div class="bg"></div>
+<div class="container">
+	<div class="clock">
+		<x-clock></x-clock>
+	</div>
+</div>
+
+</body>
+</html>	
